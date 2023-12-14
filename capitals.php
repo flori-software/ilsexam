@@ -15,6 +15,7 @@ $abfrage = "SELECT DISTINCT `Continent` FROM `Country` ORDER BY `Continent` ASC"
 $results = abfrage(abfrage: $abfrage);
 $myContinent = $_POST["kontinent"] ?? "";
 
+// Auswahlfeld
 echo '<form action="#" method="POST">
 Kontinent: <select name="kontinent">';
 foreach ($results as $result) {
@@ -26,7 +27,23 @@ echo '</select>
 <input type="submit" value="anzeigen">
 </form>';
 
+// Anzeige der Ergebnisse
+if($myContinent != "") {
+    $abfrage = "SELECT Country.Name AS 'Land', City.Name AS 'Hauptstadt'
+    FROM Country
+    JOIN City ON Country.Capital = City.ID
+    WHERE Country.Continent = :kontinent";
+    $array_parameternamen = Array(":kontinent");
+    $array_parameterwerte = Array($myContinent);
+    $results = abfrage($abfrage, $array_parameternamen, $array_parameterwerte);
+    echo '<table>';
+    foreach ($results as $result) {
+        echo '<tr><td>'.$result["Land"].'</td><td>'.$result["Hauptstadt"].'</td></tr>';
+    }
+    echo '</table>';
+}
 
+// Datenbankzugriff
 function abfrage($abfrage, $array_parameternamen = Array(), $array_parameterwerte = Array()) {
     $servername = "localhost";
     $username = "world";
