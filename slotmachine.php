@@ -12,13 +12,14 @@ echo '<!DOCTYPE html>
 // Übermittelte Werte
 $spiel = $_GET["spiel"] ?? false;
 if($spiel) {
-
+    $einsatz               = $_POST["einsatz"] ?? 0;
+    $_SESSION["guthaben"] -= $einsatz;
 } else {
     $_SESSION["guthaben"] = 10000;
 }
 
 $max_einsatz = $_SESSION["guthaben"];
-if($guthaben > 100) {
+if($_SESSION["guthaben"] > 100) {
     $einsatzvorschlag = 100;
 } else {
     $einsatzvorschlag =  $guthaben;
@@ -32,19 +33,39 @@ $felder[0] = random_int(1, 8);
 $felder[1] = random_int(1, 8);
 $felder[2] = random_int(1, 8);
 
+if($spiel) {
+    // Anzahl der gleichen Werte wird ermittelt
+    $anzahl_gleiche_werte = array_count_values($felder);
+
+    // Nun wird der höchste Wert aus dieser ermittelt, denn wir haben an dieser Stelle ein Array mit möglichen Werten 1, 1, 1 oder 2, 1 oder 3
+    $ergebnis = max($anzahl_gleiche_werte);
+    switch ($ergebnis) {
+        case '2':
+            echo '<p>Doppeltreffer!</p>';
+            $_SESSION["guthaben"] += 2 * $einsatz;
+        break;
+
+        case '3':
+            echo '<p>Dreifachtreffer!</p>';
+            $_SESSION["guthaben"] += 3 * $einsatz;
+        break;
+    }
+
+}
+
 foreach ($felder as $key => $feld) {
     echo '<input name="feld'.$key.'" value="'.$feld.'" disabled>&nbsp;';
 }
 echo '<p>Guthaben:</p>
-<form action="slotmachine.php?spiel=1" method="POST">
+<form action="slotmachine.php?spiel=true" method="POST">
 <input value="'.$_SESSION["guthaben"].'" disabled>
-<p>Ihr Einsatz bitte: '.$max_einsatz.'</p>
+<p>Ihr Einsatz bitte:</p>
 <input type="number" name="einsatz" min="1" min="1" max="'.$max_einsatz.'" value="'.$einsatzvorschlag.'">
 <p>
-<input type="submit" value="Spielen">&nbsp;
+<input type="submit" value="Spielen" style="inline-block;">&nbsp;
 </form>
 <form action="#">
-<input type="submit" value="Neues Spiel">
+<input type="submit" value="Neues Spiel" style="inline-block;">
 </form>
 </p>';
 
