@@ -18,14 +18,11 @@ if($spiel) {
     $_SESSION["guthaben"] = 10000;
 }
 
-$max_einsatz = $_SESSION["guthaben"];
 if($_SESSION["guthaben"] > 100) {
     $einsatzvorschlag = 100;
 } else {
     $einsatzvorschlag =  $guthaben;
 }
-
-
 
 // Felder 1 bis 3
 $felder  = array();
@@ -53,6 +50,8 @@ if($spiel) {
 
 }
 
+$max_einsatz = $_SESSION["guthaben"];
+
 foreach ($felder as $key => $feld) {
     echo '<input name="feld'.$key.'" value="'.$feld.'" disabled>&nbsp;';
 }
@@ -62,10 +61,11 @@ echo '<p>Guthaben:</p>
 <p>Ihr Einsatz bitte:</p>
 <input type="number" name="einsatz" min="1" min="1" max="'.$max_einsatz.'" value="'.$einsatzvorschlag.'">
 <p>
-<input type="submit" value="Spielen" style="inline-block;">&nbsp;
+<table>
+<tr><td><input type="submit" value="Spielen" style="inline-block;"></td>
 </form>
 <form action="#">
-<input type="submit" value="Neues Spiel" style="inline-block;">
+<td><input type="submit" value="Neues Spiel" style="inline-block;"></td></tr></table>
 </form>
 </p>';
 
