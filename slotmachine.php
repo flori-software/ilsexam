@@ -68,10 +68,5 @@ echo '<p>Guthaben:</p>
 <td><input type="submit" value="Neues Spiel" style="inline-block;"></td></tr></table>
 </form>
 </p>';
-
-
-
-
-    
 echo '</body></html>';
 ?>
